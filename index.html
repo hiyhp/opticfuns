@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>helloJoy</title>
+    <title>HIYHP 的音乐空间</title>
     <link rel="stylesheet" href="./index.css">
-
 </head>
 <body>
 
-    <div class="background-container">
-        <div class="show">
-            <div class="lyrics-panel">
-                <h3>当前歌曲</h3>
-                <div class="lyrics-list">
-                    
-                </div>
-            </div>
+    <div class="background-container"></div>
+
+    <div class="lyrics-panel">
+        <h3 id="lyrics-title">Loading...</h3>
+        <div class="lyrics-mask">
+            <ul class="lyrics-list">
+                <li>等待播放...</li>
+            </ul>
         </div>
     </div>
 
-
     <div class="music-player">
-        <audio id="audio-element" src="./Music/Sofia Jannok - Liekkas.mp3"></audio>
+        <audio id="audio-element"></audio>
 
         <div class="player-controls">
-            <button class="btn-control" id="play-btn" title="播放">▶</button>
+            <button class="btn-control" id="prev-btn" aria-label="上一曲">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+            </button>
+
+            <button class="btn-control play-btn-large" id="play-btn" aria-label="播放">
+                <svg id="play-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="pause-icon" viewBox="0 0 24 24" fill="currentColor" style="display:none;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            
+            <button class="btn-control" id="next-btn" aria-label="下一曲">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+            </button>
             
             <div class="song-info">
-                <strong>背景音乐</strong><br>
-                <span style="font-size: 12px; opacity: 0.7;">展示曲目</span>
+                <div class="text-wrapper">
+                    <strong id="song-title">准备播放</strong>
+                    <span id="song-artist">HIYHP Space</span>
+                </div>
             </div>
 
             <div class="progress-container" id="progress-container">
@@ -37,6 +48,7 @@
             </div>
         </div>
     </div>
+
     <script defer src="./index.js"></script>
 </body>
 </html>

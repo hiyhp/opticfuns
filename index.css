@@ -1,145 +1,229 @@
-   /* --- CSS 样式部分 --- */
+/* --- 0. 变量定义 (方便以后一键换肤) --- */
+:root {
+    --primary-color: #1db954; /* 核心主题色 (Spotify绿) */
+    --text-white: #ffffff;
+    --text-gray: rgba(255, 255, 255, 0.6);
+    --glass-bg: rgba(0, 0, 0, 0.3);
+    --glass-blur: blur(20px);
+}
 
-        /* 1. 全局设置：去除默认边距，设置字体 , 通过这样的方式,可以实现网页的全局覆盖 */
-        body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            overflow: hidden; /* 防止出现滚动条 */
-        }
+/* --- 1. 全局重置 --- */
+* {
+    box-sizing: border-box; /* 这是一个工程化好习惯 */
+}
 
-        /* 2. 全屏背景设置 */
-        .background-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* 提示：在这里替换你的图片 URL */
-            background-image: url('./imgs/bg.png');
-            background-size: cover; /* 确保图片覆盖整个屏幕 */
-            background-position: center;
-            z-index: -1; /* 放在最底层 */
-            filter: brightness(0.7); /* 把背景稍微变暗，让文字更清晰 */
-        }
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow: hidden;
+    user-select: none; /* 防止狂点按钮时选中文字 */
+    background: #000;
+}
 
-        /* 3. 中间展示内容区域 */
-        .content-area {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            color: white;
-            z-index: 1;
-        }
+/* --- 2. 背景层 --- */
+.background-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-image: url('./imgs/【哲风壁纸】休闲-帐篷-户外.png'); 
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+    filter: brightness(0.6); /* 压暗背景，突出内容 */
+    transition: transform 10s ease; /* 稍微动一下的特效预留 */
+}
 
-        .content-area h1 {
-            font-size: 3rem;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-        }
-
-        .content-area p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-        }
-
-        /* 4. 底部音乐播放器样式 */
-        .music-player {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 80px;
-            background: rgba(85, 79, 79, 0.6); /* 半透明黑色背景 */
-            backdrop-filter: blur(10px); /* 毛玻璃效果 */
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            z-index: 10;
-        }
-
-        /* 播放器内的控件布局 */
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            width: 80%;
-            max-width: 800px;
-        }
-
-        /* 按钮样式 */
-        .btn-control {
-            background: none;
-            border: 2px solid white;
-            color: white;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .btn-control:hover {
-            background: white;
-            color: black;
-        }
-
-        /* 歌曲信息 */
-        .song-info {
-            font-size: 14px;
-            min-width: 100px;
-        }
-
-        /* 进度条样式 */
-        .progress-container {
-            flex-grow: 1;
-            height: 5px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 5px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .progress-bar {
-            width: 0%; /* 初始宽度 */
-            height: 100%;
-            background: #1db954; /* 类似 Spotify 的绿色 */
-            border-radius: 5px;
-            transition: width 0.1s linear;
-        }
-
-
+/* --- 3. 歌词面板 (精细化优化) --- */
 .lyrics-panel {
-    /* --- 1. 定位核心 (左侧居中) --- */
-    position: fixed;  /* 固定定位：钉在屏幕上 */
-    top: 50%;         /* 顶部先走到屏幕中间 */
-    left: 30px;       /* 距离左边屏幕 30px */
-    /* 【关键魔法】因为 top:50% 是以窗口顶部为准的，所以要向上回退自身高度的一半，才能真正垂直居中 */
-    transform: translateY(-50%); 
-    z-index: 5;       /* 层级：比背景(-1)高，比底部播放器(10)低 */
+    position: fixed;
+    top: 50%;
+    left: 6%;
+    transform: translateY(-60%);
+    width: 320px;
+    height: 50vh; /* 占据屏幕高度的一半 */
+    z-index: 5;
+    color: var(--text-white);
+    display: flex;
+    flex-direction: column;
+}
 
-    /* --- 2. 窗口大小与外观 --- */
-    width: 260px;     /* 宽度 */
-    height: 400px;    /* 固定高度 */
-    /* 保持风格统一：半透明黑色 + 毛玻璃 */
-    background: rgba(235, 229, 229, 0.2); /* 半透明白色 */
-    backdrop-filter: blur(10px);
-    border-radius: 15px; /* 圆角 */
-    padding: 20px;       /* 内边距，别让字贴边 */
-    color: #ffffff;      /* 白色文字 */
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1); /* 加点阴影更有立体感 */
+.lyrics-panel h3 {
+    text-align: center;
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
 
-    /* --- 3. 【重要】滚动条设置 --- */
-    overflow-y: auto; /* 如果歌词太长，自动出现垂直滚动条 */
-    /* 隐藏丑丑的默认滚动条 (Webkit内核浏览器有效) */
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;  /* IE 10+ */
+/* 遮罩容器：让歌词上下边缘有渐隐消失的效果 */
+.lyrics-mask {
+    flex: 1;
+    overflow: hidden; /* 隐藏原始滚动条 */
+    position: relative;
+    mask-image: linear-gradient(to bottom, 
+        transparent 0%, 
+        black 15%, 
+        black 85%, 
+        transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+}
+
+.lyrics-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    overflow-y: auto;
+    height: 100%;
+    /* 隐藏滚动条但保留功能 */
+    scrollbar-width: none; 
+    -ms-overflow-style: none;
+}
+.lyrics-list::-webkit-scrollbar { display: none; }
+
+.lyrics-list li {
+    padding: 14px 10px;
+    font-size: 15px;
+    color: var(--text-gray);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    cursor: default;
+}
+
+/* 高亮歌词样式 */
+.lyrics-list li.active {
+    color: var(--primary-color);
+    font-size: 22px;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(29, 185, 84, 0.4);
+    transform: scale(1.05);
+}
+
+/* --- 4. 底部播放器 --- */
+.music-player {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 90px;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: var(--glass-blur); /* 毛玻璃 */
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 90%;
+    max-width: 1000px;
+}
+
+/* 按钮通用样式 */
+.btn-control {
+    background: transparent;
+    border: none;
+    color: var(--text-white);
+    width: 40px; height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.2s;
+    opacity: 0.8;
+}
+
+.btn-control:hover {
+    background: rgba(255, 255, 255, 0.1);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.btn-control svg {
+    width: 24px; height: 24px;
+}
+
+/* 中间播放按钮特大号 */
+.play-btn-large {
+    width: 56px; height: 56px;
+    background: var(--text-white);
+    color: #000; /* 反色设计：白底黑标 */
+    opacity: 1;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.play-btn-large:hover {
+    background: #f0f0f0;
+    transform: scale(1.05);
+}
+.play-btn-large svg {
+    width: 32px; height: 32px;
+    margin-left: 2px; /* 视觉修正：三角形图标稍微居中 */
+}
+
+/* 歌曲信息 */
+.song-info {
+    flex: 0 0 150px; /* 固定宽度，防止跳动 */
+    overflow: hidden;
+}
+.text-wrapper {
+    display: flex;
+    flex-direction: column;
+}
+#song-title { font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#song-artist { font-size: 12px; color: var(--text-gray); }
+
+/* 进度条 */
+.progress-container {
+    flex: 1; /* 自动撑满剩余空间 */
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    transition: height 0.2s;
+}
+
+/* 鼠标放上去变粗，方便点击 */
+.progress-container:hover {
+    height: 8px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 2px;
+    position: relative;
+}
+/* 进度条末端的小圆点 */
+.progress-bar::after {
+    content: '';
+    position: absolute;
+    right: -6px; top: 50%;
+    transform: translateY(-50%) scale(0); /* 默认隐藏 */
+    width: 12px; height: 12px;
+    background: var(--text-white);
+    border-radius: 50%;
+    transition: transform 0.2s;
+}
+.progress-container:hover .progress-bar::after {
+    transform: translateY(-50%) scale(1); /* hover时显示 */
+}
+
+/* --- 5. 手机端适配 (响应式) --- */
+@media (max-width: 768px) {
+    .lyrics-panel {
+        display: none; /* 手机屏幕太小，先隐藏歌词，或者你可以把它改到底部 */
+    }
+    .player-controls {
+        gap: 15px;
+    }
+    .song-info {
+        flex: 1; /* 手机上信息优先 */
+    }
 }
